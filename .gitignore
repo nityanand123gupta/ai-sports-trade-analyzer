@@ -7,3 +7,4 @@ venv/
 output/
 *.egg-info/
 .mypy_cache/
+.ipynb_checkpoints/

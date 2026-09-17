@@ -41,7 +41,20 @@ numbers a human can audit and trust.
                     └──────────────────┘
 ```
 
-## Quick start
+## 📓 Teaching walkthrough (start here if presenting/demoing)
+
+`notebooks/trade_analyzer_walkthrough.ipynb` is a self-contained Jupyter
+notebook built for walking someone through this project cell by cell — each
+agent gets its own markdown explanation, runnable code, and a plot (aging
+curve, player value scores, net trade value, a live illegal-trade example).
+No API key needed.
+
+```bash
+pip install -r requirements-notebook.txt
+jupyter notebook notebooks/trade_analyzer_walkthrough.ipynb
+```
+
+## Quick start (CLI)
 
 ```bash
 pip install -r requirements.txt

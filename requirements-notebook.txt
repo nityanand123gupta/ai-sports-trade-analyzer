@@ -1,0 +1,6 @@
+-r requirements.txt
+jupyter
+nbconvert
+nbclient
+matplotlib
+ipykernel
