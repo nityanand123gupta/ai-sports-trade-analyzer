@@ -1,149 +1,83 @@
-# AI-Driven Multi-Agent Sports Front Office
+# AI Multi-Agent Sports Trade Analyzer
 
-A pro-sports trade analysis system built with **agentic coding**: specialized
-autonomous agents (Data Scout, Quantitative Analyst, CBA/Cap Specialist,
-General Manager) collaborate to evaluate whether a proposed NBA trade is
-statistically sound *and* legal under the league's salary-cap rules.
+A project that shows how a proposed NBA trade can be checked automatically
+by a small team of specialist programs, each doing one job the way a
+person in a team's front office would: looking up player data, rating
+players, checking the trade against the league's spending rules, and
+producing a final graded recommendation.
 
-The project ships as two layers:
+The whole project is two notebooks, meant to be taught or presented cell by
+cell rather than run as a script.
 
-1. **Deterministic core** (`src/pipeline.py`) — real player/salary data,
-   an aging-curve value model, and a CBA salary-matching/apron rules engine.
-   Runs with **zero API keys**, fully unit tested.
-2. **Agentic layer** (`src/crew.py`) — a [CrewAI](https://github.com/crewAIInc/crewAI)
-   crew of four LLM-powered agent personas that reason over the deterministic
-   layer's verified numbers to produce a narrative trade recommendation.
-   Opt-in via `--agentic`, requires `ANTHROPIC_API_KEY`.
+## The two notebooks
 
-This split matters: the LLM never has to "do the salary math" (a place LLMs
-are unreliable) — it only reasons about strategy, fit, and framing on top of
-numbers a human can audit and trust.
+| Notebook | What it is | Requirements |
+|---|---|---|
+| [`notebooks/01_trade_analyzer_core.ipynb`](notebooks/01_trade_analyzer_core.ipynb) | The complete engine, self-contained: data loading, a player value model based on age and stats, a salary-cap rules checker, and a final report generator. Plain, predictable code explained cell by cell with plots. | None. No account, no API key, no internet connection. |
+| [`notebooks/02_agentic_crew_demo.ipynb`](notebooks/02_agentic_crew_demo.ipynb) | Loads notebook 1 and adds a real AI agent team on top, using [CrewAI](https://github.com/crewAIInc/crewAI): four AI agents reason over the same numbers to write a plain-language recommendation. | `pip install crewai` and an `ANTHROPIC_API_KEY`. Runs fine and explains itself without either. |
 
-## Architecture
+Start with notebook 1 — it's the complete story on its own. Notebook 2 is
+the follow-up that shows how to add a real AI model on top.
 
-```
-                    ┌─────────────────┐
-   trade proposal → │   Data Scout     │  pulls roster/salary/stat data
-                    └────────┬─────────┘  (live nba_api, falls back to
-                             │             bundled offline dataset)
-              ┌──────────────┴──────────────┐
-              ▼                             ▼
-   ┌─────────────────────┐      ┌───────────────────────┐
-   │ Quantitative Analyst │      │  CBA / Cap Specialist  │
-   │ aging-curve value    │      │  salary-matching bands,│
-   │ scores, team fit     │      │  apron rules, legality │
-   └──────────┬───────────┘      └───────────┬───────────┘
-              └──────────────┬───────────────┘
-                              ▼
-                    ┌──────────────────┐
-                    │   General Manager │  synthesizes a graded
-                    │   agent            │  trade recommendation
-                    └──────────────────┘
-```
+## Why it's split this way
 
-## 📓 Teaching walkthrough (start here if presenting/demoing)
+Notebook 1 makes the main point on its own: salary-cap math and trade
+approval are exactly the kind of thing that should be handled by plain,
+predictable code, not an AI model guessing at numbers. Notebook 2 then
+shows where an AI model genuinely helps — writing explanations and weighing
+judgment calls — once it's given numbers it can trust instead of being
+asked to calculate them itself.
 
-`notebooks/trade_analyzer_walkthrough.ipynb` is a self-contained Jupyter
-notebook built for walking someone through this project cell by cell — each
-agent gets its own markdown explanation, runnable code, and a plot (aging
-curve, player value scores, net trade value, a live illegal-trade example).
-No API key needed.
+## Quick start
 
 ```bash
 pip install -r requirements-notebook.txt
-jupyter notebook notebooks/trade_analyzer_walkthrough.ipynb
+jupyter notebook notebooks/01_trade_analyzer_core.ipynb
 ```
 
-## Quick start (CLI)
+Run the cells from top to bottom. Each specialist gets its own explanation
+before the code that carries out its job.
 
-```bash
-pip install -r requirements.txt
+Tip for presenting this: run one cell, pause on the explanation above it,
+and let the audience guess the output before you run the next cell. The
+notebook ends with an example of a trade that should not be allowed, plus a
+few discussion questions.
 
-# Deterministic mode (no API key required)
-python -m src.main examples/sample_trade.json
+## Data
 
-# Force offline mode (skip live nba_api network calls)
-python -m src.main examples/sample_trade.json --offline
+`data/sample_players.json` is a small offline file with a few NBA teams'
+rosters and approximate salaries/stats, used by both notebooks — no
+internet connection needed. `data/cap_rules.json` holds the salary cap,
+luxury tax, and spending-limit thresholds used by the rules checker.
 
-# Full agentic mode (CrewAI + Claude narrative synthesis)
-cp .env.example .env   # then add your ANTHROPIC_API_KEY
-python -m src.main examples/sample_trade.json --agentic
-```
+> These figures and rules are simplified for teaching purposes. Check the
+> official league rules before relying on this for anything real.
 
-### Propose your own trade
+## How the salary-cap rules checker works
 
-Create a JSON file like `examples/sample_trade.json`:
+Notebook 1 implements a simplified version of the NBA's real spending
+rules:
 
-```json
-{
-  "team_a": "BOS",
-  "team_b": "LAL",
-  "team_a_sends": ["Jrue Holiday"],
-  "team_b_sends": ["D'Angelo Russell", "Gabe Vincent"]
-}
-```
+- **Under the cap** — a team can take back incoming salary up to its
+  remaining room plus the outgoing salary.
+- **Over the cap, including luxury-tax teams** — incoming salary must stay
+  within a percentage of the outgoing salary (roughly 200%, 175%, or 125%
+  depending on how much is being sent out).
+- **First strict spending level** — can take back at most the outgoing
+  salary plus $250,000, and cannot combine several outgoing players'
+  salaries into one trade.
+- **Second, strictest spending level** — cannot take back more salary than
+  sent out at all, and also cannot combine outgoing salaries.
 
-Player and team names must exist in `src/data/sample_players.json` (the
-offline dataset) — see that file for the full roster of playable teams
-(`BOS`, `LAL`, `DAL`, `MIA`).
-
-## Running tests
-
-```bash
-pip install -r requirements.txt
-pytest -v
-```
-
-## Project layout
-
-```
-src/
-  data/
-    cap_rules.json         # 2025-26 salary cap / tax / apron thresholds
-    sample_players.json    # offline fallback roster + salary + stat dataset
-  tools/
-    nba_data_tool.py       # live nba_api fetch + offline fallback
-    cap_rules.py           # CBA salary-matching & apron legality engine
-    quant_analysis.py      # aging-curve player value model
-  agents/
-    crew_tools.py          # CrewAI tool wrapping the deterministic pipeline
-  pipeline.py               # deterministic Scout -> Quant -> Cap -> GM pipeline
-  crew.py                   # CrewAI 4-agent crew (agentic narrative layer)
-  main.py                   # CLI entrypoint
-tests/                      # pytest unit tests for cap rules, quant model, pipeline
-examples/sample_trade.json  # example trade proposal
-```
-
-## How the CBA rules engine works
-
-`src/tools/cap_rules.py` implements a simplified version of the real 2023
-NBA CBA:
-
-- **Under the cap** — a team can take back incoming salary up to its cap
-  room plus the outgoing salary.
-- **Over the cap, under the first apron** (includes taxpayers) — salary
-  must "match" within banded multipliers (200% / 175% / 125% + $250k
-  depending on outgoing salary size).
-- **First apron** — can take back at most 100% of outgoing salary + $250k,
-  and cannot aggregate multiple outgoing players' salaries into one trade.
-- **Second apron** — cannot take back *more* salary than sent out at all,
-  and also cannot aggregate outgoing salaries.
-
-When a trade violates these rules, the Cap Specialist proposes a concrete
-balancing move (shed more salary) rather than just rejecting the trade —
-mirroring the "feedback loop" pattern common in agentic workflows.
-
-> These figures/rules are simplified for educational/simulation purposes.
-> Verify against the official CBA before using for anything real.
+When a trade breaks these rules, the checker explains the problem and
+suggests a specific fix (send out more salary) instead of just rejecting
+the trade outright.
 
 ## Extending this project
 
-- Swap `src/tools/quant_analysis.py`'s formulas for a trained scikit-learn/
-  XGBoost model (the blueprint this project is based on suggests this).
-- Add a **Sentiment Analysis Agent** with a Reddit/X API tool to gauge fan
-  reaction to a rumored trade.
-- Add a **Negotiation Simulation**: two GM agents (one per team) counter-offer
-  each other in a loop (`Process.hierarchical` in CrewAI) until they converge
-  or give up.
-- Point `nba_data_tool.py` at other sports' APIs (FBref for soccer,
-  Sportradar for NFL/MLB) and swap in that sport's CBA/cap rules.
+- Replace the age-based value model with a trained machine-learning model.
+- Add an agent that reads fan reaction to a rumored trade from social media.
+- Add a negotiation simulation: two General Manager agents, one per team,
+  counter-offer each other until they reach a deal.
+- Connect the data-loading step to a live sports data service instead of
+  the bundled sample file, or adapt the rules checker to another sport.

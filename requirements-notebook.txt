@@ -1,6 +1,9 @@
--r requirements.txt
 jupyter
 nbconvert
 nbclient
 matplotlib
 ipykernel
+
+# Optional: only needed to run notebook 2 (02_agentic_crew_demo.ipynb) with
+# real LLM reasoning instead of its offline explanation fallback.
+crewai
