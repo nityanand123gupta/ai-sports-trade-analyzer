@@ -14,7 +14,7 @@ cell rather than run as a script.
 | Notebook | What it is | Requirements |
 |---|---|---|
 | [`notebooks/01_trade_analyzer_core.ipynb`](notebooks/01_trade_analyzer_core.ipynb) | The complete engine, self-contained: data loading, a player value model based on age and stats, a salary-cap rules checker, and a final report generator. Plain, predictable code explained cell by cell with plots. | None. No account, no API key, no internet connection. |
-| [`notebooks/02_agentic_crew_demo.ipynb`](notebooks/02_agentic_crew_demo.ipynb) | Loads notebook 1 and adds a real AI agent team on top, using [CrewAI](https://github.com/crewAIInc/crewAI): four AI agents reason over the same numbers to write a plain-language recommendation. | `pip install crewai` and an `ANTHROPIC_API_KEY`. Runs fine and explains itself without either. |
+| [`notebooks/02_agentic_crew_demo.ipynb`](notebooks/02_agentic_crew_demo.ipynb) | Loads notebook 1 and adds a real AI agent team on top, using [CrewAI](https://github.com/crewAIInc/crewAI): four AI agents reason over the same numbers to write a plain-language recommendation. | `pip install crewai` and a free `GEMINI_API_KEY` from [Google AI Studio](https://aistudio.google.com/apikey) (Anthropic's `ANTHROPIC_API_KEY` also works). Runs fine and explains itself without either. |
 
 Start with notebook 1 — it's the complete story on its own. Notebook 2 is
 the follow-up that shows how to add a real AI model on top.
@@ -42,6 +42,21 @@ Tip for presenting this: run one cell, pause on the explanation above it,
 and let the audience guess the output before you run the next cell. The
 notebook ends with an example of a trade that should not be allowed, plus a
 few discussion questions.
+
+## Running notebook 2 with a free API key
+
+1. Get a free key at [Google AI Studio](https://aistudio.google.com/apikey)
+   (no credit card required for the free tier).
+2. Copy `.env.example` to `.env` and paste the key into `GEMINI_API_KEY`, or
+   just set it in your shell:
+   ```bash
+   export GEMINI_API_KEY=your-key-here
+   pip install crewai
+   ```
+3. Open and run `notebooks/02_agentic_crew_demo.ipynb`.
+
+Already have an Anthropic key instead? Set `ANTHROPIC_API_KEY` and it will
+be used automatically if no Gemini key is present.
 
 ## Data
 
