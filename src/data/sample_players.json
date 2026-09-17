@@ -1,0 +1,43 @@
+{
+  "_comment": "Illustrative sample dataset used as an offline fallback when live NBA API data is unavailable. Stats/salaries are approximate and for demo purposes only.",
+  "teams": {
+    "BOS": {
+      "name": "Boston Celtics",
+      "roster": [
+        {"name": "Jaylen Brown", "position": "SG", "age": 29, "salary": 49205800, "contract_years_remaining": 4, "per": 21.6, "win_shares": 8.4},
+        {"name": "Derrick White", "position": "PG", "age": 31, "salary": 28966700, "contract_years_remaining": 3, "per": 17.9, "win_shares": 7.1},
+        {"name": "Jrue Holiday", "position": "PG", "age": 35, "salary": 32400000, "contract_years_remaining": 1, "per": 15.2, "win_shares": 5.8},
+        {"name": "Kristaps Porzingis", "position": "C", "age": 30, "salary": 30678000, "contract_years_remaining": 2, "per": 22.1, "win_shares": 6.0},
+        {"name": "Sam Hauser", "position": "SF", "age": 27, "salary": 10000000, "contract_years_remaining": 3, "per": 12.4, "win_shares": 3.2}
+      ]
+    },
+    "LAL": {
+      "name": "Los Angeles Lakers",
+      "roster": [
+        {"name": "Anthony Davis", "position": "PF", "age": 32, "salary": 54127000, "contract_years_remaining": 2, "per": 26.8, "win_shares": 9.9},
+        {"name": "D'Angelo Russell", "position": "PG", "age": 29, "salary": 18692000, "contract_years_remaining": 1, "per": 16.5, "win_shares": 4.5},
+        {"name": "Austin Reaves", "position": "SG", "age": 27, "salary": 13300000, "contract_years_remaining": 3, "per": 17.3, "win_shares": 5.9},
+        {"name": "Rui Hachimura", "position": "PF", "age": 27, "salary": 17000000, "contract_years_remaining": 2, "per": 15.0, "win_shares": 4.1},
+        {"name": "Gabe Vincent", "position": "PG", "age": 29, "salary": 10800000, "contract_years_remaining": 2, "per": 9.8, "win_shares": 1.7}
+      ]
+    },
+    "DAL": {
+      "name": "Dallas Mavericks",
+      "roster": [
+        {"name": "Kyrie Irving", "position": "PG", "age": 33, "salary": 41000000, "contract_years_remaining": 2, "per": 22.0, "win_shares": 6.6},
+        {"name": "Daniel Gafford", "position": "C", "age": 26, "salary": 13400000, "contract_years_remaining": 4, "per": 20.5, "win_shares": 6.8},
+        {"name": "P.J. Washington", "position": "PF", "age": 27, "salary": 15700000, "contract_years_remaining": 3, "per": 14.1, "win_shares": 4.3},
+        {"name": "Klay Thompson", "position": "SG", "age": 35, "salary": 15200000, "contract_years_remaining": 2, "per": 12.8, "win_shares": 3.0}
+      ]
+    },
+    "MIA": {
+      "name": "Miami Heat",
+      "roster": [
+        {"name": "Bam Adebayo", "position": "C", "age": 28, "salary": 34848000, "contract_years_remaining": 3, "per": 20.9, "win_shares": 8.0},
+        {"name": "Tyler Herro", "position": "SG", "age": 26, "salary": 31000000, "contract_years_remaining": 3, "per": 18.4, "win_shares": 5.4},
+        {"name": "Terry Rozier", "position": "PG", "age": 32, "salary": 24900000, "contract_years_remaining": 2, "per": 14.6, "win_shares": 3.5},
+        {"name": "Duncan Robinson", "position": "SF", "age": 31, "salary": 18150000, "contract_years_remaining": 2, "per": 11.2, "win_shares": 2.9}
+      ]
+    }
+  }
+}
