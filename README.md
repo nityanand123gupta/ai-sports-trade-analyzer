@@ -9,9 +9,10 @@ producing a final graded recommendation.
 The whole project is two notebooks, meant to be taught or presented cell by
 cell rather than run as a script.
 
-See [`DESIGN.md`](DESIGN.md) for the full design write-up: the idea, a
+See [`DESIGN.pdf`](DESIGN.pdf) for the full design write-up: the idea, a
 worked example, an architecture diagram, each agent's role, and the
-low-level formulas/data model.
+low-level formulas/data model. ([`DESIGN.md`](DESIGN.md) is the same
+content in Markdown, kept as the editable source.)
 
 ## The two notebooks
 
