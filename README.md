@@ -14,6 +14,15 @@ worked example, an architecture diagram, each agent's role, and the
 low-level formulas/data model. ([`DESIGN.md`](DESIGN.md) is the same
 content in Markdown, kept as the editable source.)
 
+See [`tech-stack.html`](tech-stack.html) for what's used to build this and
+why (Python, Jupyter, Matplotlib, CrewAI, Gemini/Claude, python-dotenv,
+Mermaid, and the rest).
+
+Static, already-executed views of both notebooks (open these if you just
+want to read the output without installing anything):
+[`notebooks/01_trade_analyzer_core.html`](notebooks/01_trade_analyzer_core.html) ·
+[`notebooks/02_agentic_crew_demo.html`](notebooks/02_agentic_crew_demo.html)
+
 ## The two notebooks
 
 | Notebook | What it is | Requirements |
